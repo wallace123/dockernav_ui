@@ -1,5 +1,14 @@
 from django.db import models
 from django.utils import timezone
+import os
+from datetime import datetime
+
+
+def make_dir():
+    directory = '/docker-mount-' + str(datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"))
+    os.mkdir(directory)
+    return directory
+
 
 # Create your models here.
 class Container(models.Model):
@@ -26,4 +35,9 @@ class Container(models.Model):
     )
 
     def __str__(self):
-        return '%s_%s' % (self.user, self.container) 
+        return '%s_%s' % (self.user, self.container)
+
+    directory = models.CharField(
+        max_length=50,
+        default=make_dir
+    ) 
