@@ -14,7 +14,7 @@
   <img src="{% static 'images/cloudera_transparent.png' %}">
 {% if user.is_authenticated %}
   <li class=login-welcome>Welcome, {{user.username}}</li>
-  <li><a href="#active_containers">Active Containers</a></li>
+  <li><a href="{% url 'active_containers' %}">Active Containers</a></li>
   <li><a href="{% url 'new_container' %}">New Container</a></li>
   <li><a href="{% url 'logout' %}">Logout</a></li>
 {% else %}

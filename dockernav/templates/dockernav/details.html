@@ -1,0 +1,10 @@
+{% extends 'dockernav/base.html' %}
+
+{% block content %}
+<h2>Details for {{ cont.image }}-{{ cont.rand_int }}</h2>
+<li>Created Date: {{ cont.created_date }}</li><br>
+<li>Container Type: {{ cont.image }}</li><br>
+<li>Host: {{ cont.navserver.host }}</li><br>
+<li>Port: {{ cont.port }}</li><br>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'dockernav/base.html' %}
+
+{% block content %}
+<h2>Active Containers</h2>
+{% for cont in containers %}
+<a href="{% url 'detail' cont_pk=cont.pk nav_pk=cont.navserver.pk %}">
+    {{ cont.image }}-{{ cont.rand_int }}
+</a>
+<br>
+{% endfor %}
+{% endblock %}

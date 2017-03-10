@@ -48,6 +48,7 @@ def container_new(request):
     return render(request, 'dockernav/new_container.html', {'form': form})
 
 
+@login_required
 def vnc_new(request, cont_pk, nav_pk):
     """ Create a new VNC image """
 
@@ -102,6 +103,7 @@ def vnc_new(request, cont_pk, nav_pk):
     return render(request, 'dockernav/new_vnc.html', {'form': form})
 
 
+@login_required
 def jabber_new(request, cont_pk, nav_pk):
     """ Create a new Jabber image """
 
@@ -159,4 +161,22 @@ def jabber_new(request, cont_pk, nav_pk):
     return render(request, 'dockernav/new_jabber.html', {'form': form})
 
 
+@login_required
+def container_list(request):
+    """ Displays active containers """
 
+    containers = Container.objects.filter(user=request.user)
+
+    return render(request, 'dockernav/active_containers.html',
+                  {'containers': containers})
+
+
+@login_required
+def container_detail(request, cont_pk, nav_pk):
+    """ Displays the details about a container """
+
+    cont = get_object_or_404(Container, pk=cont_pk)
+    nav_server = get_object_or_404(NavServer, pk=nav_pk)
+
+    return render(request, 'dockernav/details.html',
+                  {'cont': cont})
