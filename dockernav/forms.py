@@ -14,7 +14,7 @@ class ImageForm(forms.ModelForm):
 
 
 class VNCForm(forms.ModelForm):
-    """ Input VNC info """
+    """ Add VNC items to Image """
 
     class Meta:
         model = Container
@@ -24,7 +24,7 @@ class VNCForm(forms.ModelForm):
 
 
 class JabberForm(forms.ModelForm):
-    """ Input Jabber info """
+    """ Add Jabber items to Image """
 
     class Meta:
         model = Container

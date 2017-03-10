@@ -41,6 +41,7 @@ class Container(models.Model):
 
     vnc_pass = models.CharField(max_length=20, blank=True)
 
+    jabber_ip = models.CharField(max_length=20, blank=True)
     user1 = models.CharField(max_length=20, blank=True)
     pass1 = models.CharField(max_length=20, blank=True)
 

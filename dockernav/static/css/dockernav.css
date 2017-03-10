@@ -35,3 +35,11 @@ li a {
 li a:hover {
     background-color: #111;
 }
+
+.save {
+    float: left;
+}
+
+.post-form textarea, .post-form input {
+    width: 500;
+}
