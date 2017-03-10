@@ -1,7 +1,7 @@
+""" Models.py sets tables for database """
+
 from django.db import models
 from django.utils import timezone
-from datetime import datetime
-import random
 
 
 # Create your models here.
@@ -9,7 +9,7 @@ class NavServer(models.Model):
     """ Holds the IP and Port of the available Nav Servers """
     name = models.CharField(max_length=20)
 
-    ip = models.CharField(max_length=20)
+    host = models.CharField(max_length=20)
     port = models.IntegerField(default=0)
 
     def __str__(self):
@@ -18,7 +18,19 @@ class NavServer(models.Model):
 
 class Container(models.Model):
     """ Holds the supported docker containers """
-    rand_int = models.IntegerField(default=0)
+    user = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+    )
+
+    navserver = models.ForeignKey(
+        'dockernav.NavServer',
+        on_delete=models.CASCADE,
+    )
+
+    created_date = models.DateTimeField(default=timezone.now)
+
+    rand_int = models.IntegerField(default=0, unique=True)
 
     DOCKER_IMAGES = (
         ('vnc', 'wallace123/docker-vnc'),
@@ -49,6 +61,6 @@ class Container(models.Model):
     container = models.CharField(max_length=30, blank=True)
     dservice_path = models.CharField(max_length=40, blank=True)
     docker = models.CharField(max_length=40, blank=True)
-    
+
     def __str__(self):
         return '%s-%d' % (self.image, self.rand_int)

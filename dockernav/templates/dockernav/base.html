@@ -1,0 +1,30 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DockerNav UI</title>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="{% static 'css/dockernav.css' %}">
+  </head>
+
+<body>
+
+<ul>
+  <img src="{% static 'images/cloudera_transparent.png' %}">
+{% if user.is_authenticated %}
+  <li class=login-welcome>Welcome, {{user.username}}</li>
+  <li><a href="#active_containers">Active Containers</a></li>
+  <li><a href="#create_new">New Container</a></li>
+  <li><a href="{% url 'logout' %}">Logout</a></li>
+{% else %}
+  <li><a href="{% url 'login' %}">Login</a></li>
+{% endif %}
+  <img src="{% static 'images/small_h-trans.png' %}">
+</ul>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

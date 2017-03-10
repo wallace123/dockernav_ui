@@ -1,6 +1,8 @@
 import random
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from .models import NavServer, Container
+from .forms import ImageForm, VNCForm, JabberForm
 
 
 def rand_n_digits(num_digits):
@@ -11,6 +13,12 @@ def rand_n_digits(num_digits):
 
 
 # Create your views here.
+def start_page(request):
+    """ Display start page """
+
+    return render(request, 'dockernav/start.html', {})
+
+
 def container_select(request):
     """ Select a container """
 
