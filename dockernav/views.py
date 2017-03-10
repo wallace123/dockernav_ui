@@ -61,6 +61,40 @@ def vnc_new(request, cont_pk, nav_pk):
             vnc.user = request.user
             vnc.navserver = nav_server
             vnc.save()
+
+            # Set up for connection to navlistener
+            HOST = nav_server.host
+            PORT = nav_server.port
+            vnc_dict = {'action': 'start',  'rand_int': vnc.rand_int,
+                        'image': 'wallace123/docker-vnc',
+                        'vncpass': vnc.vnc_pass}
+            data = json.dumps(vnc_dict)
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            try:
+                sock.connect((HOST, PORT))
+                sock.send(data)
+                recv = sock.recv(1024)
+            finally:
+                sock.close()
+
+            # Save received data to database
+            recv_dict = json.loads(recv)
+            vnc.category = recv_dict['category']
+            vnc.loop_file = recv_dict['loop_file']
+            vnc.dservice = recv_dict['dservice']
+            vnc.dockerd = recv_dict['dockerd']
+            vnc.device = recv_dict['device']
+            vnc.port = recv_dict['port']
+            vnc.docker_run = recv_dict['docker_run']
+            vnc.docker_lib = recv_dict['docker_lib']
+            vnc.docker_bridge = recv_dict['docker_bridge']
+            vnc.mount_point = recv_dict['mount_point']
+            vnc.container = recv_dict['container']
+            vnc.dservice_path = recv_dict['dservice_path']
+            vnc.docker = recv_dict['docker']
+
+            vnc.save()
             return redirect('start_page')
     else:
         form = VNCForm()
@@ -82,8 +116,47 @@ def jabber_new(request, cont_pk, nav_pk):
             jabber.user = request.user
             jabber.navserver = nav_server
             jabber.save()
+
+            # Set up for connection to navlistener
+            HOST = nav_server.host
+            PORT = nav_server.port
+            jabber_dict = {'action': 'start',  'rand_int': jabber.rand_int,
+                          'image': 'wallace123/docker-jabber',
+                          'jabber_ip': jabber.jabber_ip,
+                          'user1': jabber.user1, 'pass1': jabber.pass1,
+                          'user2': jabber.user2, 'pass2': jabber.pass2}
+            data = json.dumps(jabber_dict)
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            try:
+                sock.connect((HOST, PORT))
+                sock.send(data)
+                recv = sock.recv(1024)
+            finally:
+                sock.close()
+
+            # Save received data to database
+            recv_dict = json.loads(recv)
+            jabber.category = recv_dict['category']
+            jabber.loop_file = recv_dict['loop_file']
+            jabber.dservice = recv_dict['dservice']
+            jabber.dockerd = recv_dict['dockerd']
+            jabber.device = recv_dict['device']
+            jabber.port = recv_dict['port']
+            jabber.docker_run = recv_dict['docker_run']
+            jabber.docker_lib = recv_dict['docker_lib']
+            jabber.docker_bridge = recv_dict['docker_bridge']
+            jabber.mount_point = recv_dict['mount_point']
+            jabber.container = recv_dict['container']
+            jabber.dservice_path = recv_dict['dservice_path']
+            jabber.docker = recv_dict['docker']
+
+            jabber.save()
             return redirect('start_page')
     else:
         form = JabberForm()
 
     return render(request, 'dockernav/new_jabber.html', {'form': form})
+
+
+
