@@ -96,7 +96,7 @@ def vnc_new(request, cont_pk, nav_pk):
             vnc.docker = recv_dict['docker']
 
             vnc.save()
-            return redirect('start_page')
+            return redirect('active_containers')
     else:
         form = VNCForm()
 
@@ -154,7 +154,7 @@ def jabber_new(request, cont_pk, nav_pk):
             jabber.docker = recv_dict['docker']
 
             jabber.save()
-            return redirect('start_page')
+            return redirect('active_containers')
     else:
         form = JabberForm()
 
@@ -180,3 +180,34 @@ def container_detail(request, cont_pk, nav_pk):
 
     return render(request, 'dockernav/details.html',
                   {'cont': cont})
+
+
+@login_required
+def container_delete(request, cont_pk, nav_pk):
+    """ Deletes the container """
+
+    cont = get_object_or_404(Container, pk=cont_pk)
+    nav_server = get_object_or_404(NavServer, pk=nav_pk)
+
+    # Set up for connect to navlistener
+    HOST = nav_server.host
+    PORT = nav_server.port
+    cont_dict = {'action': 'stop', 'container': cont.container,
+                 'docker': cont.docker, 'dservice': cont.dservice,
+                 'dservice_path': cont.dservice_path, 'device': cont.device,
+                 'category': cont.category, 'docker_lib': cont.docker_lib,
+                 'docker_run': cont.docker_run, 'mount_point': cont.mount_point,
+                 'loop_file': cont.loop_file, 'dockerd': cont.dockerd,
+                 'docker_bridge': cont.docker_bridge, 'port': cont.port}
+    data = json.dumps(cont_dict)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    try:
+        sock.connect((HOST, PORT))
+        sock.send(data)
+        recv = sock.recv(1024)
+    finally:
+        sock.close()
+
+    cont.delete()
+    return redirect('active_containers')

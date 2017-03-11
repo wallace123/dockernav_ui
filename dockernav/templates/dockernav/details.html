@@ -6,5 +6,7 @@
 <li>Container Type: {{ cont.image }}</li><br>
 <li>Host: {{ cont.navserver.host }}</li><br>
 <li>Port: {{ cont.port }}</li><br>
+<br>
+<a href="{% url 'delete' cont_pk=cont.pk nav_pk=cont.navserver.pk %}" class="btn btn-default">Delete</a>
 
 {% endblock %}
